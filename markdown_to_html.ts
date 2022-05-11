@@ -1,0 +1,15 @@
+import { marked } from 'marked';
+import * as fs from 'fs';
+
+let output = fs.readFileSync('./test.md');
+let output_s = output.toString();
+
+console.log(output_s)
+let html = marked.parse(output_s);
+
+console.log(html)
+
+let html2 = '<meta name="viewport" content="width=device-width, initial-scale=1">\n<link rel="stylesheet" href="github-markdown.css"><script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script><article class="markdown-body">' + html + '\n</article>'
+
+let test = fs.openSync("test.html","w");
+fs.writeFileSync(test,html2);

@@ -1,0 +1,6 @@
+.card2 {
+  border-radius: 20px;
+background: #fcfcfc;
+box-shadow:  8px 8px 16px #e0e0e0,
+             -8px -8px 16px #ffffff;
+}
