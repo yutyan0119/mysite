@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+import layouts from "express-ejs-layouts";
 
 import { router as indexRouter } from "./routes/index";
 import { router as netRouter } from "./routes/net";
@@ -20,6 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(layouts);
+
 
 app.use("/", indexRouter);
 app.use("/net", netRouter);
