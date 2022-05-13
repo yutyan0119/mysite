@@ -62,6 +62,7 @@ router.get('/:id',async function (req,res,next){
     let post = await Posts.findfrom_id(id);
     if (!post){
         res.redirect('/posts');
+        return;
     }
     if (post["article_html"] === null){
         post["article_html"] = marked.parse(post.article);

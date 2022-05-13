@@ -9,7 +9,7 @@ export class DatabaseManager {
     constructor(filePath:string) {
         this.filePath = filePath;
     }
-    async getInstance() {
+    getInstance() {
         if (!this.database) {
             this.database = new Database(this.filePath);
         }

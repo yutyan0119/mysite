@@ -14,7 +14,7 @@ export class Posts {
 	) {}
 
 	async save(author?:string, article?:string, title?:string) {
-		const db = await databaseManager.getInstance();
+		const db =  databaseManager.getInstance();
 		this.author = this.author??author;
 		this.article = this.article??article;
 		this.title = this.title??title;
@@ -31,7 +31,7 @@ export class Posts {
 	};
 
 	async deletefrom_id(id:number){
-		const db = await databaseManager.getInstance();
+		const db =  databaseManager.getInstance();
 		const a =  db.prepare("delete  from posts where id = $id");
 		const b = a.run({
 			id: id
@@ -40,28 +40,28 @@ export class Posts {
 	}
 
 	static async get_all() {
-		const db = await databaseManager.getInstance();
+		const db =  databaseManager.getInstance();
 		const stmt = db.prepare('select * from posts')
 		const postlist =  stmt.all();
 		return postlist;
 	}
 
 	static async findfrom_author(author:string) {
-		const db = await databaseManager.getInstance();
+		const db =  databaseManager.getInstance();
 		const stmt = db.prepare('select * from posts where author = ?')
 		const postlist:any[] = stmt.all(author);
 		return postlist;
 	}
 
 	static async findfrom_id(id:number) {
-		const db = await databaseManager.getInstance();
+		const db =  databaseManager.getInstance();
 		const stmt = db.prepare('select * from posts where id = ?');
 		const data = stmt.get(id);
 		return data;
 	}
 
 	async updatefrom_id(title:string,article:string,id:number, ){
-		const db = await databaseManager.getInstance();
+		const db =  databaseManager.getInstance();
 		this.id = id;
 		this.title = title;
 		this.article= article;
@@ -80,7 +80,7 @@ export class Posts {
 	}
 
 	static async inserthtml(id:number,article_html:string) {
-		const db = await databaseManager.getInstance();
+		const db =  databaseManager.getInstance();
 		const a = db.prepare("update posts  set article_html = $article_html where id = $id");
 		const b = a.run({
 			id: id,

@@ -9,11 +9,36 @@ import { router as indexRouter } from "./routes/index";
 import { router as netRouter } from "./routes/net";
 import { router as raspRouter } from "./routes/raspi";
 import { router as postRouter } from "./routes/posts";
-
+import {databaseManager} from "./db/index";
+const session = require("express-session");
+const SqliteStore = require("better-sqlite3-session-store")(session);
+const db = databaseManager.getInstance();
 const app = express();
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+declare module 'express-session' {
+    interface SessionData {
+        views:number;
+    }
+  }
+  
+
+app.use(
+    session({
+        store: new SqliteStore({
+            client: db,
+            expired: {
+                clear: true,
+                intervalMs: 900000
+            }
+        }),
+        secret: "hogehoge",
+        resave: false,
+        cookie: {maxAge: 900000},
+        saveUninitialized: true
+    })
+)
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -47,6 +72,6 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 app.listen(51515,()=>{
     console.log('start port to 51515')
 });
-//本番環境は3000番or443番
+//本番環境は3000番or開発は51515
 
 module.exports = app;
