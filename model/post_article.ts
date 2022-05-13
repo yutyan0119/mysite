@@ -1,4 +1,5 @@
 import {databaseManager} from "../db/index";
+import {marked} from "marked";
 // const db = new sqlite3.Database("/home/yuto/project/markdowntohtml/db/test.db");
 
 export class Posts {
@@ -9,6 +10,7 @@ export class Posts {
 		public id?:number,
 		public created_at?:Date,
 		public updated_at?:Date,
+		public article_html?:string,
 	) {}
 
 	async save(author?:string, article?:string, title?:string) {
@@ -16,10 +18,13 @@ export class Posts {
 		this.author = this.author??author;
 		this.article = this.article??article;
 		this.title = this.title??title;
-		const {lastID} = await db.run("insert into posts (author, article, title) values ($author, $article,$title)", {
+		this.article_html = marked.parse(this.article);
+		console.log(this.article_html);
+		const {lastID} = await db.run("insert into posts (author, article, title, article_html) values ($author, $article, $title, $article_html)", {
 			$author: this.author,
 			$article: this.article,
 			$title: this.title,
+			$article_html: this.article_html,
 		}
 		);
 		return lastID;
@@ -61,14 +66,28 @@ export class Posts {
 		this.title = title;
 		this.article= article;
 		let date = new Date();
-		let formatDate = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
-		const a = await db.run("update posts set title = $title, article = $article, updated_at = $nowdate where id = $id",{
+		this.article_html = marked.parse(this.article);
+		let formatDate = date.getFullYear() + "-" + digits(date.getMonth()+1,2) + "-" + digits(date.getDate(),2) + " "+digits(date.getHours(),2)+":"+digits(date.getMinutes(),2)+":"+digits(date.getSeconds(),2);
+		const a = await db.run("update posts set title = $title, article = $article, updated_at = $nowdate, article_html=$article_html where id = $id",{
 			$title: this.title,
 			$article: this.article,
 			$nowdate: formatDate,
 			$id: id,
+			$article_html: this.article_html,
+		});
+		return a.changes;
+	}
+
+	static async inserthtml(id:number,article_html:string) {
+		const db = await databaseManager.getInstance();
+		const a = await db.run("update posts  set article_html = $article_html where id = $id",{
+			$id: id,
+			$article_html: article_html,
 		});
 		return a.changes;
 	}
 
 };
+const digits = (num: number, length: number): string => {
+    return `${num}`.padStart(length, "0");
+  };

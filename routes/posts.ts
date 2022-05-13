@@ -60,7 +60,13 @@ router.get('/:id',async function (req,res,next){
         return;
     }
     let post = await Posts.findfrom_id(id);
-    post["article_html"] = marked.parse(post.article);
+    if (!post){
+        res.redirect('/posts');
+    }
+    if (post["article_html"] === null){
+        post["article_html"] = marked.parse(post.article);
+        await Posts.inserthtml(id,post["article_html"]);
+    }
     res.render('post_show',{title: "yutyan's site",post: post});
 })
 
