@@ -44,7 +44,7 @@ router.post('/:id/edit',async function (req,res,next){
     res.redirect('/posts/'+id);
 })
 
-router.get('/:id/edit',async function (req,res,next){
+router.get('/:id/edit', async function (req,res,next){
     const posts = new Posts();
     let id = Number(req.params.id);
     let post = await Posts.findfrom_id(id);
@@ -65,3 +65,7 @@ router.get('/:id',async function (req,res,next){
 })
 
 
+router.post("/presave",async function (req,res){
+    let hoge = await marked.parse(req.body.body);
+    res.send(hoge);
+})

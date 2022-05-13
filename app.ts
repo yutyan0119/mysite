@@ -5,7 +5,6 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import layouts from "express-ejs-layouts";
-
 import { router as indexRouter } from "./routes/index";
 import { router as netRouter } from "./routes/net";
 import { router as raspRouter } from "./routes/raspi";
@@ -22,6 +21,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(layouts);
+
+
 
 
 app.use("/", indexRouter);
@@ -46,5 +47,6 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 app.listen(51515,()=>{
     console.log('start port to 51515')
 });
+//本番環境は3000番or443番
 
 module.exports = app;

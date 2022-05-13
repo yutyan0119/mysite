@@ -4,12 +4,16 @@
         <form action="/posts/new" method="post" >
             <label for="ttile" class="form-label">タイトル </label>
             <input class="form-control" id="title" type="text" name="title" value="">
-            <label class = "form-label" for="body">本文 You can write in markdown</label>
+            <label class = "form-label" for="body">本文 You can write in markdown. Ctrl+S will show you markdown style.</label>
             <textarea class = "form-control" name="body" id="body" cols="30" rows="10"></textarea>
             <label class = "form-label" for="name">著者名</label>
             <input class = "form-control" id = "name" type="text" name = "author">
             <input type="submit" value="OK">
         </form>
       </div>
+      <div class = "col-md-6 card mt-5 pt-5 pb-5">
+        <span id = "markdown-article" class = "markdown-body"></span>
+      </div>
     </div>
   </div>
+  <script src="/javascripts/textarea.js"></script>
