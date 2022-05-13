@@ -20,43 +20,43 @@ export class Posts {
 		this.title = this.title??title;
 		this.article_html = marked.parse(this.article);
 		console.log(this.article_html);
-		const {lastID} = await db.run("insert into posts (author, article, title, article_html) values ($author, $article, $title, $article_html)", {
-			$author: this.author,
-			$article: this.article,
-			$title: this.title,
-			$article_html: this.article_html,
-		}
-		);
-		return lastID;
+		const a =  db.prepare("insert into posts (author, article, title, article_html) values ($author, $article, $title, $article_html)");
+		const b = a.run({
+			author: this.author,
+			article: this.article,
+			title: this.title,
+			article_html: this.article_html,
+		})
+		return b.lastID;
 	};
 
 	async deletefrom_id(id:number){
 		const db = await databaseManager.getInstance();
-		const a = await db.run("delete  from posts where id = $id",{
-			$id: id
+		const a =  db.prepare("delete  from posts where id = $id");
+		const b = a.run({
+			id: id
 		});
-		return a.changes;
+		return b.changes;
 	}
 
 	static async get_all() {
 		const db = await databaseManager.getInstance();
-		const postlist = await db.all("select * from posts");
+		const stmt = db.prepare('select * from posts')
+		const postlist =  stmt.all();
 		return postlist;
 	}
 
 	static async findfrom_author(author:string) {
 		const db = await databaseManager.getInstance();
-		const postlist:any[] = await db.all("select * from posts where author = $author", {
-			$author: author
-		});
+		const stmt = db.prepare('select * from posts where author = ?')
+		const postlist:any[] = stmt.all(author);
 		return postlist;
 	}
 
 	static async findfrom_id(id:number) {
 		const db = await databaseManager.getInstance();
-		const data = await db.get("select * from posts where id = $id",{
-			$id: id
-		});
+		const stmt = db.prepare('select * from posts where id = ?');
+		const data = stmt.get(id);
 		return data;
 	}
 
@@ -68,23 +68,25 @@ export class Posts {
 		let date = new Date();
 		this.article_html = marked.parse(this.article);
 		let formatDate = date.getFullYear() + "-" + digits(date.getMonth()+1,2) + "-" + digits(date.getDate(),2) + " "+digits(date.getHours(),2)+":"+digits(date.getMinutes(),2)+":"+digits(date.getSeconds(),2);
-		const a = await db.run("update posts set title = $title, article = $article, updated_at = $nowdate, article_html=$article_html where id = $id",{
-			$title: this.title,
-			$article: this.article,
-			$nowdate: formatDate,
-			$id: id,
-			$article_html: this.article_html,
-		});
-		return a.changes;
+		const a = db.prepare("update posts set title = $title, article = $article, updated_at = $nowdate, article_html=$article_html where id = $id");
+		const b = a.run({
+			title: this.title,
+			article: this.article,
+			nowdate: formatDate,
+			id: id,
+			article_html: this.article_html,
+		})
+		return b.changes;
 	}
 
 	static async inserthtml(id:number,article_html:string) {
 		const db = await databaseManager.getInstance();
-		const a = await db.run("update posts  set article_html = $article_html where id = $id",{
-			$id: id,
-			$article_html: article_html,
+		const a = db.prepare("update posts  set article_html = $article_html where id = $id");
+		const b = a.run({
+			id: id,
+			article_html: article_html,
 		});
-		return a.changes;
+		return b.changes;
 	}
 
 };
