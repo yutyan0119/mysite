@@ -8,11 +8,4 @@ router.get('/', function(req, res, next) {
       if(error) return console.error('ERROR',error);
       res.render('index', { title: "yutyan's site",temp: stdout });
     });
-    if (req.session.views===null){
-      req.session.views = 0;
-    }
-    else {
-      req.session.views += 1;
-    }
-    console.log(req.session.views);
   });

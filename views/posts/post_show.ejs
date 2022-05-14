@@ -6,11 +6,12 @@
     <div class=""row>
         <div class = "col-sm-12 col-md-10 col-lg-8 mx-auto mt-4 mb-5">  
             <h1 class = "h1"><%= post.title %></h1>
-            <p class = "text-end text-muted">written by <%= post.author %> </p>
+            <p class = "text-end text-muted">written by <%= post.user_name %> </p>
             <article class="markdown-body card2 px-5 py-5 mb-2">
                 <%- post.article_html %>
             </article>
             <p class = "text-sm-end text-muted text-end">written in <%= post.created_at %> updated at <%= post.updated_at %></p>
+            <% if (auth ) { %>
             <div class = "text-end">
                 <a href= "<%= "/posts/" + post.id + "/edit" %>"   class = "btn btn-primary" >編集</a>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modal" >削除</button>
@@ -27,11 +28,12 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <a href="/posts/<%= post.id %>/edit" class ="btn btn-danger">削除</a>
+                      <a href="/posts/<%= post.id %>/delete" class ="btn btn-danger">削除</a>
                     </div>
                   </div>
                 </div>
               </div>
+              <% } %>
         </div>  
     </div>
   </div>

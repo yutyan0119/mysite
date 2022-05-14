@@ -36,6 +36,6 @@ renderer.codespan = function(text:any) {
   return rendererCodespan(text);
 };
 
-const md = "`$$c=\sqrt{a^2 + b^2}$$`";
+const md = '`$$c=\sqrt{a^2 + b^2}$$`';
 
 console.log(marked.parse(md, { renderer: renderer }));

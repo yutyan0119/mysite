@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { Posts } from "../model/post_article";
 import {marked} from "marked";
+import {body,validationResult}from 'express-validator';
+import sanitizeHtml from 'sanitize-html';
 export const router = Router();
 
 const omit = async (text:string, len:number, ellipsis:string) =>{
@@ -15,30 +17,57 @@ router.get('/', async function(req, res, next) {
         let article = posts[i].article;
         posts[i]["article_top"] = await omit(article,20,"...");
     }
-    res.render('posts',{ title: "yutyan's site",posts: posts});
+    let auth = false;
+    if (req.session.user_id){
+        auth = true;
+    }
+    res.render('posts/posts',{ title: "yutyan's site",posts: posts, auth: auth});
 });
 
 router.get('/new',async function (req,res,next){
-    console.log("aa");
-    res.render('post_create',{title: "yutyan's site"});
+    if (!req.session.user_id){
+        res.redirect("/posts");
+    }
+    else {
+        res.render('posts/post_create',{title: "yutyan's site"});
+    }
 })
 
-router.post('/new',async function (req,res,next){
-    console.log(req.body);
+router.post('/new',
+    body("title").isLength({min:1,max:100}),
+    body("body").isLength({min:1}),
+    async function (req,res,next){
+    const err = validationResult(req);
+    if (!err.isEmpty()){
+        return res.status(400).json({erros: err.array()});
+    }  
+    if (!req.session.user_id){
+        res.redirect("/");
+        return;
+    }
     let title = req.body.title;
     let body = req.body.body;
-    let author = req.body.author;
-    let post = await new Posts(author,title,body);
-    let id = await post.save();
+    let user_name = req.session.user_name;
+    let user_id = req.session.user_id;
+    let post = await new Posts(user_id,user_name,title,body);
+    let data = await post.save();
+    console.log(data.lastInsertRowid);
+    let id = String(data.lastInsertRowid);
     res.redirect('/posts/'+id);
 })
 
 
-router.post('/:id/edit',async function (req,res,next){
+router.post('/:id/edit',
+    body("title").isLength({min:1,max:100}),
+    body("body").isLength({min:1}),
+    async function (req,res,next){
+    const err = validationResult(req);
+    if (!err.isEmpty()){
+        return res.status(400).json({erros: err.array()});
+    }  
     const posts = new Posts();
     let id = Number(req.params.id);
     let body = req.body.body;
-    let author = req.body.author;
     let title = req.body.title;
     await posts.updatefrom_id(title,body,id);
     res.redirect('/posts/'+id);
@@ -47,10 +76,32 @@ router.post('/:id/edit',async function (req,res,next){
 router.get('/:id/edit', async function (req,res,next){
     const posts = new Posts();
     let id = Number(req.params.id);
-    let post = await Posts.findfrom_id(id);
-    res.render('post_edit',{title: "yutyan's site",post: post});
+    let post =  Posts.findfrom_id(id);
+    console.log(post);
+    if (!post){
+        res.redirect('/posts');
+        return;
+    }
+    else if (post["user_id"]===req.session.user_id){
+        res.render('posts/post_edit',{title: "yutyan's site",post: post});
+        return;
+    }
+    else {
+        res.redirect('/posts/'+req.params.id);
+        return;
+    }
 })
 
+router.get('/:id/delete', async function (req,res,next){
+    let id = Number(req.params.id);
+    if ( Posts.findfrom_id(id).user_id ===req.session.user_id){
+        await Posts.deletefrom_id(id);
+        res.redirect("/posts");
+    }
+    else {
+        res.redirect("/posts");
+    }
+})
 
 router.get('/:id',async function (req,res,next){
     const posts = new Posts();
@@ -65,14 +116,19 @@ router.get('/:id',async function (req,res,next){
         return;
     }
     if (post["article_html"] === null){
-        post["article_html"] = marked.parse(post.article);
+        post["article_html"] = sanitizeHtml(marked.parse(post.article),{
+			allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ])
+		});
         await Posts.inserthtml(id,post["article_html"]);
     }
-    res.render('post_show',{title: "yutyan's site",post: post});
+    let auth = (post["user_id"] == req.session.user_id);
+    res.render('posts/post_show',{title: "yutyan's site",post: post,auth: auth});
 })
 
 
 router.post("/presave",async function (req,res){
-    let hoge = await marked.parse(req.body.body);
+    let hoge = await sanitizeHtml(marked.parse(req.body.body),{
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ])
+    });
     res.send(hoge);
 })

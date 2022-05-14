@@ -9,6 +9,7 @@ import { router as indexRouter } from "./routes/index";
 import { router as netRouter } from "./routes/net";
 import { router as raspRouter } from "./routes/raspi";
 import { router as postRouter } from "./routes/posts";
+import { router as userRouter } from "./routes/user";
 import {databaseManager} from "./db/index";
 const session = require("express-session");
 const SqliteStore = require("better-sqlite3-session-store")(session);
@@ -19,7 +20,8 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 declare module 'express-session' {
     interface SessionData {
-        views:number;
+        user_id:number;
+        user_name:string;
     }
   }
   
@@ -30,12 +32,12 @@ app.use(
             client: db,
             expired: {
                 clear: true,
-                intervalMs: 900000
+                intervalMs: 7*24*60*60*1000,
             }
         }),
         secret: "hogehoge",
         resave: false,
-        cookie: {maxAge: 900000},
+        cookie: {maxAge: 7*24*60*60*1000},
         saveUninitialized: true
     })
 )
@@ -54,6 +56,7 @@ app.use("/", indexRouter);
 app.use("/net", netRouter);
 app.use("/raspi", raspRouter);
 app.use("/posts", postRouter);
+app.use("/users", userRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) =>
     next(createError(404,'page not found'))
@@ -69,8 +72,8 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 
 
-app.listen(51515,()=>{
-    console.log('start port to 51515')
+app.listen(3000,()=>{
+    console.log('start port to 3000')
 });
 //本番環境は3000番or開発は51515
 
