@@ -4,10 +4,10 @@
         
     </div>
     <div class=""row>
-        <div class = "col-sm-12 col-md-10 col-lg-8 mx-auto mt-4 mb-5">  
+        <div class = "col-sm-10 col-md-10 col-lg-8 mx-auto mt-4 mb-5">  
             <h1 class = "h1"><%= post.title %></h1>
             <p class = "text-end text-muted">written by <%= post.user_name %> </p>
-            <article class="markdown-body card2 px-5 py-5 mb-2">
+            <article class="markdown-body card2 px-sm-2 px-md-5 py-5  mb-2">
                 <%- post.article_html %>
             </article>
             <p class = "text-sm-end text-muted text-end">written in <%= post.created_at %> updated at <%= post.updated_at %></p>

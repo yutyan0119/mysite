@@ -6,10 +6,6 @@
 }
 
 .scroll {
-  max-height: 450px;
+  max-height: 800px;
   overflow-y: auto;
-}
-
-textarea {
-  resize: none;
 }

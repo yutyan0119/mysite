@@ -77,7 +77,6 @@ router.get('/:id/edit', async function (req,res,next){
     const posts = new Posts();
     let id = Number(req.params.id);
     let post =  Posts.findfrom_id(id);
-    console.log(post);
     if (!post){
         res.redirect('/posts');
         return;

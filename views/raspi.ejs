@@ -1,19 +1,20 @@
-
-  <div class="container">
-    <div class="row ">
-      <div class="col-sm-10 col-md-12 mx-auto mt-3">
-        <h3 class="h3">現在のラズパイの状況</h3>
-        <div class="card2 w-sm-75 w-md-50 mx-auto mt-3 mb-3">
-          <div class="card-body">
-            <h5 class="card-title">My first Raspberry Pi</h5>
-            <p class="card-text">初号機です。5分おきにCPU温度を保存して<a href=#temp>画像</a>にしています。</p>
-            <p class="card-text">現在のCPUtempより、2-3℃ほど高いことが多いです。Python実行時の負荷で一時的に温度が上昇している可能性が高いです。</p>
-            <p class="card-text text-center h5">
-              現在のCPU<%= temp %>
-            </p>
-          </div>
+<div class="container">
+  <div class="row ">
+    <div class="col-sm-10 col-md-12 mx-auto mt-3">
+      <h3 class="h3">現在のラズパイの状況</h3>
+      <div class="card2 w-sm-75 w-md-50 mx-auto mt-3 mb-3">
+        <div class="card-body">
+          <h5 class="card-title">My first Raspberry Pi</h5>
+          <p class="card-text">初号機です。5分おきにCPU温度を保存して<a href=#temp>画像</a>にしています。</p>
+          <p class="card-text">現在のCPUtempより、2-3℃ほど高いことが多いです。Python実行時の負荷で一時的に温度が上昇している可能性が高いです。</p>
+          <p class="card-text">2022/05/14夜より、大阪府（ラズパイの所在地）の気温履歴もグラフにプロットするように変更しました。</p>
+          <p class="card-text text-center h5">
+            現在のCPU<%= temp %>
+          </p>
         </div>
-        <img class="img-fluid mt-3" src="/images/CPUtemp.png" id="temp">
       </div>
+      <p class="text-center mx-auto">大阪の気温データは気象庁のものです。データの取得は1日に1回12時に行っています。</p>
+      <img class="img-fluid mt-3" src="/images/CPUtemp.png" id="temp">
     </div>
   </div>
+</div>

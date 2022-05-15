@@ -47,10 +47,16 @@ router.get("/sign_out", (req,res,next)=>{
 })
 
 router.get("/sign_up",(req,res,next)=>{
-    res.render('users/sign_up');
+    if (req.session.user_id!==1){
+        res.render("/posts");
+    }
+    else{
+        res.render('users/sign_up');
+    }
 })
 
 router.post("/sign_up",
+            body('user_name').isLength({min:2}),
             body('email').isEmail(),
             body('password').isLength({min:6}),
             async (req,res,next)=>{
@@ -72,6 +78,10 @@ router.post("/sign_up",
     }
     if (password != cpassword){
         res.redirect('/users/sign_up');
+        return;
+    }
+    if (req.session.user_id!==1){
+        res.render("/posts");
         return;
     }
     const Hashedpassword = await new HashPassword().generate(password);

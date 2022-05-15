@@ -25,7 +25,6 @@ export class Posts {
 		this.article_html = sanitizeHtml(marked.parse(this.article),{
 			allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ])
 		});
-		console.log(this.article_html);
 		const a =  db.prepare("insert into posts (user_id, user_name, article, title, article_html) values ($user_id,$user_name, $article, $title, $article_html)");
 		const b = a.run({
 			user_id: this.user_id,
