@@ -8,7 +8,8 @@
             <label class = "form-label" for="body">本文 You can write in markdown. Ctrl+S will show you markdown style.</label>
             <textarea class = "form-control" name="body" id="body" cols="30" rows="10" ><%= post.article %></textarea>
             <div class = "text-end mt-2">
-              <input type="submit" value="OK" class = "btn btn-sm btn-primary">
+              <input type="submit" formaction="/posts/<%= post.id %>/editdraft" value="Save draft" class = "btn btn-sm btn-success">
+              <input type="submit" value="Publish" class = "btn btn-sm btn-primary">
             </div>
           </div>
         </form>

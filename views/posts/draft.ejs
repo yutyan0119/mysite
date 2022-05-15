@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="row ">
+        <div class="col-sm-0 col-md-6 mx-auto mt-3">
+            <% for (let i in draftlist){ %>
+                <% if (i < draftlist.length/2){ %>
+                    <div class="card2 mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= draftlist[i].title %>
+                            </h5>
+                            <h6 class="card-subtitle text-muted text-right">By <%= draftlist[i].user_name %>
+                            </h6>
+                            <p class="card-text">
+                                <%= draftlist[i].article_top %>
+                            </p>
+                            <a href='/posts/<%= draftlist[i].id  %>/edit' class="btn btn-sm btn-success">編集する</a>
+                        </div>
+                    </div>
+                    <% } %>
+                        <% } %>
+        </div>
+        <div class="col-sm-0 col-md-6 mx-auto mt-3">
+            <% for (let i in draftlist){ %>
+                <% if (i>= draftlist.length/2){ %>
+                    <div class="card2 mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= draftlist[i].title %>
+                            </h5>
+                            <h6 class="card-subtitle text-muted text-right">By <%= draftlist[i].user_name %>
+                            </h6>
+                            <p class="card-text">
+                                <%= draftlist[i].article_top %>
+                            </p>
+                            <a href='/posts/<%= draftlist[i].id  %>/edit' class="btn btn-sm btn-success">編集する</a>
+                        </div>
+                    </div>
+                    <% } %>
+                        <% } %>
+        </div>
+    </div>
+    <% if (auth) {%>
+        <div class="row">
+            <div class="col-6 mx-auto text-center">
+                <a href="/posts/new" class="mt-3 btn btn-primary">Create new Article</a>
+                <a href="/posts/yourdraft" class="mt-3 btn btn-success">Your draft</a>
+            </div>
+        </div>
+        <% } %>
+</div>

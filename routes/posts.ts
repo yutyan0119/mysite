@@ -49,13 +49,51 @@ router.post('/new',
     let body = req.body.body;
     let user_name = req.session.user_name;
     let user_id = req.session.user_id;
-    let post = await new Posts(user_id,user_name,title,body);
+    let post =  new Posts(user_id,user_name,title,body);
     let data = await post.save();
     console.log(data.lastInsertRowid);
     let id = String(data.lastInsertRowid);
     res.redirect('/posts/'+id);
 })
 
+router.get('/yourdraft',async function (req,res,next){
+    if (!req.session.user_id){
+        res.redirect("/posts");
+        return;
+    }
+    else {
+        let draftlist = Posts.find_draft(req.session.user_id);
+        console.log(draftlist)
+        for (let i in draftlist){
+            let article = draftlist[i].article;
+            draftlist[i]["article_top"] = await omit(article,20,"...");
+        }
+        res.render("posts/draft",{draftlist: draftlist,auth: 1})
+    }
+})
+
+router.post('/newdraft',
+    body("title").isLength({min:1,max:100}),
+    body("body").isLength({min:1}),
+    async function (req,res,next){
+    const err = validationResult(req);
+    if (!err.isEmpty()){
+        return res.status(400).json({erros: err.array()});
+    }  
+    if (!req.session.user_id){
+        res.redirect("/");
+        return;
+    }
+    let title = req.body.title;
+    let body = req.body.body;
+    let user_name = req.session.user_name;
+    let user_id = req.session.user_id;
+    let post =  new Posts(user_id,user_name,title,body,1);
+    let data = await post.save();
+    console.log(data.lastInsertRowid);
+    let id = String(data.lastInsertRowid);
+    res.redirect('/posts/'+id);
+})
 
 router.post('/:id/edit',
     body("title").isLength({min:1,max:100}),
@@ -69,7 +107,23 @@ router.post('/:id/edit',
     let id = Number(req.params.id);
     let body = req.body.body;
     let title = req.body.title;
-    await posts.updatefrom_id(title,body,id);
+    await posts.updatefrom_id(title,body,id,0);
+    res.redirect('/posts/'+id);
+})
+
+router.post('/:id/editdraft',
+    body("title").isLength({min:1,max:100}),
+    body("body").isLength({min:1}),
+    async function (req,res,next){
+    const err = validationResult(req);
+    if (!err.isEmpty()){
+        return res.status(400).json({erros: err.array()});
+    }  
+    const posts = new Posts();
+    let id = Number(req.params.id);
+    let body = req.body.body;
+    let title = req.body.title;
+    await posts.updatefrom_id(title,body,id,1);
     res.redirect('/posts/'+id);
 })
 
@@ -116,18 +170,26 @@ router.get('/:id',async function (req,res,next){
     }
     if (post["article_html"] === null){
         post["article_html"] = sanitizeHtml(marked.parse(post.article),{
-			allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ])
+			allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img','del' ])
 		});
         await Posts.inserthtml(id,post["article_html"]);
     }
     let auth = (post["user_id"] == req.session.user_id);
-    res.render('posts/post_show',{title: "yutyan's site",post: post,auth: auth});
+    if (post["draft"] == 1 && auth){
+        res.render('posts/post_show',{title: "yutyan's site",post: post,auth: auth});
+    }
+    else if (post["draft"] == 1){
+        res.redirect('/posts');
+    }
+    else {
+        res.render('posts/post_show',{title: "yutyan's site",post: post,auth: auth});
+    }
 })
 
 
 router.post("/presave",async function (req,res){
     let hoge = await sanitizeHtml(marked.parse(req.body.body),{
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ])
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img','del' ])
     });
     res.send(hoge);
 })

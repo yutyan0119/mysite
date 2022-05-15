@@ -72,8 +72,8 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 
 
-app.listen(3000,()=>{
-    console.log('start port to 3000')
+app.listen(51515,()=>{
+    console.log('start port to 51515')
 });
 //本番環境は3000番or開発は51515
 

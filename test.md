@@ -9,7 +9,7 @@ a = 1 + 2
 b = 4 + 7
 print(a+b)
 ```
-C言語テストです
+~~C言語テストです~~
 ```c
 #include<stdio.h>
 #include<stdlib.h>
