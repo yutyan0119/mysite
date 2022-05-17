@@ -59,7 +59,6 @@ router.get('/yourdraft', async function (req, res, next) {
     }
     else {
         let draftlist = Posts.find_draft(req.session.user_id);
-        console.log(draftlist)
         res.render("posts/draft", { draftlist: draftlist, auth: 1 })
     }
 })
@@ -114,7 +113,6 @@ router.post('/:id/editdraft',
         const posts = new Posts();
         let id = Number(req.params.id);
         let body = req.body.body;
-        console.log(body)
         let title = req.body.title;
         await posts.updatefrom_id(title, body, id, 1);
         res.redirect('/posts/' + id);
