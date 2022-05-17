@@ -25,7 +25,10 @@ export class Posts {
 		this.title = this.title??title;
 		this.draft = this.draft??draft;
 		this.article_html = sanitizeHtml(marked.parse(this.article),{
-			allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img','del' ])
+			allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img','del' ]),
+			allowedClasses: {
+                'code': [ 'language-*', 'lang-*','prettyprint' ],
+              }
 		});
 		const a =  db.prepare("insert into posts (user_id, user_name, article, title, article_html, draft) values ($user_id,$user_name, $article, $title, $article_html, $draft)");
 		const b = a.run({
@@ -88,7 +91,10 @@ export class Posts {
 		this.draft = draft;
 		let date = new Date();
 		this.article_html = sanitizeHtml(marked.parse(this.article),{
-			allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img','del' ])
+			allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img','del' ]),
+			allowedClasses: {
+                'code': [ 'language-*', 'lang-*','prettyprint' ],
+              }
 		});
 		let formatDate = date.getFullYear() + "-" + digits(date.getMonth()+1,2) + "-" + digits(date.getDate(),2) + " "+digits(date.getHours(),2)+":"+digits(date.getMinutes(),2)+":"+digits(date.getSeconds(),2);
 		const a = db.prepare("update posts set title = $title, article = $article, updated_at = $nowdate, article_html=$article_html, draft = $draft where id = $id");

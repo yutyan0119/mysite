@@ -3,15 +3,15 @@
         <div class="col-sm-0 col-md-6 mx-auto mt-3">
             <% for (let i in draftlist){ %>
                 <% if (i < draftlist.length/2){ %>
-                    <div class="card2 mb-3">
+                    <div class="card2 mb-3 d-block">
                         <div class="card-body">
-                            <h5 class="card-title">
+                            <h5 class="card-title text-truncate">
                                 <%= draftlist[i].title %>
                             </h5>
-                            <h6 class="card-subtitle text-muted text-right">By <%= draftlist[i].user_name %>
+                            <h6 class="card-subtitle text-muted text-right mb-2">By <%= draftlist[i].user_name %>
                             </h6>
-                            <p class="card-text">
-                                <%= draftlist[i].article_top %>
+                            <p class="card-text text-truncate">
+                                <%= draftlist[i].article %>
                             </p>
                             <a href='/posts/<%= draftlist[i].id  %>/edit' class="btn btn-sm btn-success">編集する</a>
                         </div>
@@ -22,15 +22,15 @@
         <div class="col-sm-0 col-md-6 mx-auto mt-3">
             <% for (let i in draftlist){ %>
                 <% if (i>= draftlist.length/2){ %>
-                    <div class="card2 mb-3">
+                    <div class="card2 mb-3 d-block">
                         <div class="card-body">
-                            <h5 class="card-title">
+                            <h5 class="card-title text-truncate">
                                 <%= draftlist[i].title %>
                             </h5>
-                            <h6 class="card-subtitle text-muted text-right">By <%= draftlist[i].user_name %>
+                            <h6 class="card-subtitle text-muted text-right mb-2">By <%= draftlist[i].user_name %>
                             </h6>
-                            <p class="card-text">
-                                <%= draftlist[i].article_top %>
+                            <p class="card-text text-truncate">
+                                <%= draftlist[i].article %>
                             </p>
                             <a href='/posts/<%= draftlist[i].id  %>/edit' class="btn btn-sm btn-success">編集する</a>
                         </div>

@@ -3,11 +3,11 @@
       <div class="col-sm-0 col-md-6 mx-auto mt-3">
         <% for (let i in posts){ %>
           <% if (i < posts.length/2){ %>
-            <div class="card2 mb-3">
-                <div class = "card-body">
-                <h5 class="card-title"><%= posts[i].title %></h5>
-                <h6 class = "card-subtitle text-muted text-right">By <%= posts[i].user_name %></h6>
-                <p class ="card-text"><%= posts[i].article_top %></p>
+            <div class="card2 mb-3 d-block">
+                <div class = "card-body  ">
+                <h5 class="card-title text-truncate"><%= posts[i].title %></h5>
+                <h6 class = "card-subtitle text-muted text-right mb-2">By <%= posts[i].user_name %></h6>
+                <p class ="card-text text-truncate"><%= posts[i].article %></p>
                 <a href= '/posts/<%= posts[i].id  %>' class="btn btn-sm btn-primary">見に行く</a>
                 </div>
             </div>
@@ -17,11 +17,11 @@
       <div class="col-sm-0 col-md-6 mx-auto mt-3">
         <% for (let i in posts){ %>
           <% if (i >= posts.length/2){ %>
-            <div class="card2 mb-3">
+            <div class="card2 mb-3 d-block ">
                 <div class = "card-body">
-                <h5 class="card-title"><%= posts[i].title %></h5>
-                <h6 class = "card-subtitle text-muted text-right">By <%= posts[i].user_name %></h6>
-                <p class ="card-text"><%= posts[i].article_top %></p>
+                <h5 class="card-title text-truncate"><%= posts[i].title %></h5>
+                <h6 class = "card-subtitle text-muted text-right mb-2">By <%= posts[i].user_name %></h6>
+                <p class ="card-text text-truncate"><%= posts[i].article%></p>
                 <a href= '/posts/<%= posts[i].id  %>' class="btn btn-sm btn-primary">見に行く</a>
                 </div>
             </div>
