@@ -114,6 +114,7 @@ router.post('/:id/editdraft',
         const posts = new Posts();
         let id = Number(req.params.id);
         let body = req.body.body;
+        console.log(body)
         let title = req.body.title;
         await posts.updatefrom_id(title, body, id, 1);
         res.redirect('/posts/' + id);
@@ -189,5 +190,5 @@ router.post("/presave", async function (req, res) {
             'code': ['language-*', 'lang-*', 'prettyprint'],
         },
     });
-    res.send(hoge);
+    res.send({html: hoge});
 })
