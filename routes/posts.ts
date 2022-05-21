@@ -33,7 +33,9 @@ router.post('/new',
     body("title").isLength({ min: 1, max: 100 }),
     body("body").isLength({ min: 1 }),
     async function (req, res, next) {
+        console.log(req.body);
         const err = validationResult(req);
+        console.log(err)
         if (!err.isEmpty()) {
             return res.status(400).json({ erros: err.array() });
         }
@@ -45,7 +47,7 @@ router.post('/new',
         let body = req.body.body;
         let user_name = req.session.user_name;
         let user_id = req.session.user_id;
-        let post = new Posts(user_id, user_name, title, body);
+        let post = new Posts(user_id, user_name, title, body,0);
         let data = await post.save();
         console.log(data.lastInsertRowid);
         let id = String(data.lastInsertRowid);

@@ -65,7 +65,6 @@ export class Posts {
 		const result = stmt.all({
 			user_id: user_id
 		})
-		console.log(result);
 		return result;
 	}
 
