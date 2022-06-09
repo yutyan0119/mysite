@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {exec} from 'child_process';
+import { EEIC } from "../model/eeic";
 
 export const router = Router();
 

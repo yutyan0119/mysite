@@ -10,6 +10,7 @@ import { router as netRouter } from "./routes/net";
 import { router as raspRouter } from "./routes/raspi";
 import { router as postRouter } from "./routes/posts";
 import { router as userRouter } from "./routes/user";
+import { router as eeicRouter } from "./routes/eeic";
 import {databaseManager} from "./db/index";
 const session = require("express-session");
 const SqliteStore = require("better-sqlite3-session-store")(session);
@@ -52,11 +53,12 @@ app.use(layouts);
 
 
 
-app.use("/", indexRouter);
+app.use("/eeic",eeicRouter);
 app.use("/net", netRouter);
 app.use("/raspi", raspRouter);
 app.use("/posts", postRouter);
 app.use("/users", userRouter);
+app.use("/", indexRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) =>
     next(createError(404,'page not found'))
